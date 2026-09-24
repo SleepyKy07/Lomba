@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Masuk — Tournament Simulator</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">Tournament Simulator</a>
+    <nav class="topnav">
+      <a href="index.html">Beranda</a>
+      <a href="kelas.html">Master Kelas</a>
+      <a href="lomba.html">Lomba</a>
+      <a href="banding.html">Banding</a>
+      <a href="lintas.html">Lintas</a>
+      <a href="login.html">Masuk</a>
+    </nav>
+    <span id="auth-slot"></span>
+  </header>
+  <main>
+    <h1 class="page-title" id="auth-title">Masuk</h1>
+    <div id="cfg-banner" class="phase-banner" hidden>
+      Supabase belum dikonfigurasi. Isi <code>docs/js/config.js</code>.
+    </div>
+    <div id="flash" class="flash" hidden></div>
+    <div id="err" class="err" hidden></div>
+
+    <div class="card" style="max-width:420px">
+      <p class="hint" id="auth-hint"></p>
+      <form id="form-login" autocomplete="on">
+        <div class="form-grid">
+          <label class="full">Email
+            <input id="fld-email" name="email" type="email" required
+                   placeholder="panitia@sekolah.id" autocomplete="username">
+          </label>
+          <label class="full">Password
+            <input id="fld-pass" name="password" type="password" required
+                   minlength="6" autocomplete="current-password">
+          </label>
+        </div>
+        <div class="actions">
+          <button type="submit" id="btn-submit">Masuk</button>
+        </div>
+      </form>
+      <p class="hint" id="auth-switch"></p>
+      <p class="hint">
+        Setelah jalankan <code>0002_auth_rls.sql</code>, data hanya bisa diakses akun login.
+      </p>
+    </div>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

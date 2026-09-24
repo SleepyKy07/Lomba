@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tournament Simulator</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">Tournament Simulator</a>
+    <nav class="topnav">
+      <a href="index.html">Beranda</a>
+      <a href="kelas.html">Master Kelas</a>
+      <a href="lomba.html">Lomba</a>
+      <a href="banding.html">Banding</a>
+      <a href="lintas.html">Lintas</a>
+      <a href="login.html">Masuk</a>
+    </nav>
+    <span id="auth-slot"></span>
+  </header>
+  <main>
+    <h1 class="page-title">Beranda</h1>
+    <div id="cfg-banner" class="phase-banner" hidden>
+      Supabase belum dikonfigurasi. Isi <code>docs/js/config.js</code>
+      (Project URL + <strong>anon public</strong> key), jalankan migrasi SQL,
+      lalu muat ulang halaman.
+    </div>
+    <div id="flash" class="flash" hidden></div>
+    <div id="err" class="err" hidden></div>
+
+    <div class="card">
+      <h2>Status Tahap 4</h2>
+      <p class="hint">
+        Frontend static + Supabase + Master Kelas + Auth/RLS +
+        <strong>Buat/Detail Lomba</strong> (Pyodide) +
+        <strong>hasil/klasemen</strong>, <strong>what-if</strong>,
+        <strong>probabilitas</strong>, <strong>banding</strong>,
+        <strong>lintas &amp; optimasi multi-lomba</strong>.
+      </p>
+      <div class="stats">
+        <div class="stat"><b id="stat-kelas">-</b><span>Kelas</span></div>
+        <div class="stat"><b id="stat-lomba">-</b><span>Lomba</span></div>
+        <div class="stat"><b id="stat-user">-</b><span>Akun</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Langkah cepat</h2>
+      <ol>
+        <li>SQL: <code>0001_init.sql</code> + <code>0002_auth_rls.sql</code>.</li>
+        <li>Isi <code>docs/js/config.js</code>.</li>
+        <li><a href="login.html?mode=daftar">Daftar</a> / masuk.</li>
+        <li><a href="kelas.html">Master Kelas</a> → <a href="lomba.html">Lomba</a> (buat + lihat bracket).</li>
+        <li>Detail lomba: tab <em>Hasil</em>, <em>What-if</em>, <em>Probabilitas</em>.</li>
+        <li><a href="banding.html">Banding</a> skema · <a href="lintas.html">Lintas</a> bentrok + optimasi.</li>
+        <li>Deploy: jalankan <code>python scripts/sync_engine_to_docs.py</code> lalu push <code>docs/</code>.</li>
+      </ol>
+      <p class="hint">Auth → Providers → Email: matikan “Confirm email” untuk demo.</p>
+    </div>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Banding — Tournament Simulator</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">Tournament Simulator</a>
+    <nav class="topnav">
+      <a href="index.html">Beranda</a>
+      <a href="kelas.html">Master Kelas</a>
+      <a href="lomba.html">Lomba</a>
+      <a href="banding.html">Banding</a>
+      <a href="lintas.html">Lintas</a>
+      <a href="login.html">Masuk</a>
+    </nav>
+    <span id="auth-slot"></span>
+  </header>
+  <main>
+    <h1 class="page-title">Banding skema</h1>
+    <div id="cfg-banner" class="phase-banner" hidden>
+      Supabase belum dikonfigurasi. Isi <code>docs/js/config.js</code>.
+    </div>
+    <div id="flash" class="flash" hidden></div>
+    <div id="err" class="err" hidden></div>
+    <div id="login-cta" class="phase-banner" hidden></div>
+    <div id="engine-status" class="phase-banner" hidden></div>
+
+    <div class="card">
+      <h2>Pilih lomba (≥1)</h2>
+      <div class="checks" id="pilih-box"><span class="empty">Memuat…</span></div>
+      <div class="actions">
+        <button type="button" id="btn-banding">Bandingkan</button>
+      </div>
+    </div>
+    <div class="card" id="hasil-card" hidden>
+      <h2>COMPARISON</h2>
+      <pre id="out-banding"></pre>
+    </div>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/pyengine.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/page.js"></script>
+  <script src="js/banding.js"></script>
+</body>
+</html>

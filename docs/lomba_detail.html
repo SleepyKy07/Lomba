@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detail Lomba — Tournament Simulator</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">Tournament Simulator</a>
+    <nav class="topnav">
+      <a href="index.html">Beranda</a>
+      <a href="kelas.html">Master Kelas</a>
+      <a href="lomba.html">Lomba</a>
+      <a href="banding.html">Banding</a>
+      <a href="lintas.html">Lintas</a>
+      <a href="login.html">Masuk</a>
+    </nav>
+    <span id="auth-slot"></span>
+  </header>
+  <main>
+    <h1 class="page-title">Detail lomba</h1>
+    <div id="cfg-banner" class="phase-banner" hidden>
+      Supabase belum dikonfigurasi. Isi <code>docs/js/config.js</code>.
+    </div>
+    <div id="flash" class="flash" hidden></div>
+    <div id="err" class="err" hidden></div>
+    <div id="login-cta" class="phase-banner" hidden></div>
+    <div id="engine-status" class="phase-banner" hidden></div>
+
+    <div class="card" id="meta-card" hidden>
+      <h2 id="lomba-title">…</h2>
+      <div class="meta" id="lomba-badges"></div>
+      <div class="stats" id="lomba-stats"></div>
+      <div class="actions">
+        <a class="btn" href="lomba.html">← Daftar lomba</a>
+        <button type="button" class="danger" id="btn-hapus">Hapus lomba</button>
+      </div>
+    </div>
+
+    <div id="subnav" hidden></div>
+
+    <!-- RINGKASAN -->
+    <div id="pane-ringkasan" hidden>
+      <div class="grid2">
+        <div class="card" id="card-bracket" hidden>
+          <h2>BRACKET</h2>
+          <pre id="out-bracket"></pre>
+        </div>
+        <div class="card" id="card-schedule" hidden>
+          <h2>SCHEDULE</h2>
+          <pre id="out-schedule"></pre>
+        </div>
+      </div>
+      <div class="card" id="card-fairness" hidden>
+        <h2>FAIRNESS</h2>
+        <pre id="out-fairness"></pre>
+      </div>
+      <div class="card" id="card-notes" hidden>
+        <h2>Catatan skema</h2>
+        <ul id="out-notes"></ul>
+        <div id="out-sched-err"></div>
+      </div>
+    </div>
+
+    <!-- HASIL -->
+    <div id="pane-hasil" hidden>
+      <div class="card">
+        <h2>Isi skor</h2>
+        <table id="skor-table">
+          <thead>
+            <tr><th>ID</th><th>Ronde</th><th>Peserta</th><th>Skor A-B</th><th>Aksi</th></tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="5" class="empty">Memuat…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h2>KLASEMEN</h2>
+        <pre id="out-standings"></pre>
+      </div>
+    </div>
+
+    <!-- MANUAL + WO -->
+    <div id="pane-manual" hidden>
+      <p class="hint">
+        Edit struktural (swap / ganti peserta / walkover) <strong>menghapus semua skor</strong>
+        lalu jadwal diulang. Pindah jadwal <strong>tidak</strong> menghapus skor.
+      </p>
+      <div id="manual-ids" class="hint"></div>
+      <div class="grid2">
+        <div class="card">
+          <h2>Walkover (lolos tanpa main)</h2>
+          <form id="form-wo">
+            <div class="form-grid">
+              <label>Match
+                <select id="wo-match"></select>
+              </label>
+              <label>Pemenang
+                <select id="wo-winner">
+                  <option value="">(pilih…)</option>
+                </select>
+              </label>
+            </div>
+            <div class="actions">
+              <button type="submit">Terapkan walkover</button>
+            </div>
+          </form>
+          <p class="hint">Slot lawan dikosongkan; bracket/fairness dihitung ulang.</p>
+        </div>
+
+        <div class="card">
+          <h2>Tukar lawan (swap slot)</h2>
+          <form id="form-swap">
+            <div class="form-grid">
+              <label>Match A
+                <select id="sw-a"></select>
+              </label>
+              <label>Slot A
+                <select id="sw-sa"><option>a</option><option>b</option></select>
+              </label>
+              <label>Match B
+                <select id="sw-b"></select>
+              </label>
+              <label>Slot B
+                <select id="sw-sb"><option>a</option><option>b</option></select>
+              </label>
+            </div>
+            <div class="actions">
+              <button type="submit">Tukar</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Pindah jadwal</h2>
+          <form id="form-move">
+            <div class="form-grid">
+              <label>Match
+                <select id="mv-match"></select>
+              </label>
+              <label>Jam mulai <input id="mv-time" value="08:00" size="6" placeholder="HH:MM"></label>
+              <label>Arena <input id="mv-arena" type="number" value="1" min="1"></label>
+            </div>
+            <div class="actions">
+              <button type="submit">Pindah</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Ganti peserta</h2>
+          <form id="form-replace">
+            <div class="form-grid">
+              <label>Lama
+                <select id="rp-old"></select>
+              </label>
+              <label>Baru
+                <select id="rp-new">
+                  <option value="">(pilih…)</option>
+                </select>
+              </label>
+            </div>
+            <div class="actions">
+              <button type="submit">Ganti</button>
+            </div>
+          </form>
+          <p class="hint">ID baru harus belum ada di lomba ini (mis. dari Master Kelas).</p>
+        </div>
+      </div>
+      <div class="card" id="manual-log-card" hidden>
+        <h2>Catatan manual terakhir</h2>
+        <ul id="manual-log"></ul>
+      </div>
+    </div>
+
+    <!-- WHAT-IF -->
+    <div id="pane-whatif" hidden>
+      <div class="card">
+        <h2>What-if (belum simpan lomba baru)</h2>
+        <form id="form-whatif">
+          <div class="form-grid">
+            <label>Hapus peserta (koma)
+              <input id="wi-remove" placeholder="XII-06,XII-07">
+            </label>
+            <label>Tambah peserta (koma)
+              <input id="wi-add" placeholder="XII-28">
+            </label>
+            <label>Format
+              <select id="wi-format">
+                <option value="">(tetap)</option>
+                <option value="knockout">knockout</option>
+                <option value="preliminary_knockout">preliminary_knockout</option>
+                <option value="round_robin">round_robin</option>
+                <option value="group">group</option>
+                <option value="group_knockout">group_knockout</option>
+              </select>
+            </label>
+            <label>Team size <input id="wi-team_size" type="number" min="1" placeholder="-"></label>
+            <label>Juara <input id="wi-winner_count" type="number" min="1" placeholder="-"></label>
+            <label>Durasi <input id="wi-duration_min" type="number" min="1" placeholder="-"></label>
+            <label>Rest min <input id="wi-minimum_rest_min" type="number" min="0" placeholder="-"></label>
+            <label>Arena <input id="wi-arena_count" type="number" min="1" placeholder="-"></label>
+            <label>Lolos/grup <input id="wi-qualify_per_group" type="number" min="1" placeholder="-"></label>
+            <label>Num groups <input id="wi-num_groups" type="number" min="0" placeholder="-"></label>
+            <label>Mulai <input id="wi-start_time" placeholder="08:00"></label>
+            <label>Selesai <input id="wi-end_time" placeholder="17:00"></label>
+          </div>
+          <div class="actions">
+            <button type="submit">Hitung what-if</button>
+          </div>
+        </form>
+        <div id="whatif-notes" class="hint"></div>
+        <pre id="out-whatif" hidden></pre>
+      </div>
+    </div>
+
+    <!-- PROBABILITAS -->
+    <div id="pane-prob" hidden>
+      <div class="card">
+        <h2>Probabilitas (Monte Carlo)</h2>
+        <p class="hint">Hasil simulasi model — BUKAN prediksi kemampuan nyata peserta.</p>
+        <form id="form-prob">
+          <div class="form-grid">
+            <label>Mode
+              <select id="pb-mode">
+                <option value="equal">equal</option>
+                <option value="custom">custom (bobot A=2,B=1,…)</option>
+                <option value="persen">persen (A=60,B=40)</option>
+              </select>
+            </label>
+            <label>n simulasi <input id="pb-n" type="number" value="2000" min="1" max="50000"></label>
+            <label>Seed <input id="pb-seed" type="number" placeholder="opsional"></label>
+            <label class="full">Bobot (custom/persen)
+              <input id="pb-bobot" placeholder="XII-01=2,XII-02=1">
+            </label>
+          </div>
+          <div class="actions">
+            <button type="submit">Jalankan simulasi</button>
+          </div>
+        </form>
+        <pre id="out-prob" hidden></pre>
+      </div>
+    </div>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/pyengine.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/page.js"></script>
+  <script src="js/lomba_detail.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lomba — Tournament Simulator</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">Tournament Simulator</a>
+    <nav class="topnav">
+      <a href="index.html">Beranda</a>
+      <a href="kelas.html">Master Kelas</a>
+      <a href="lomba.html">Lomba</a>
+      <a href="banding.html">Banding</a>
+      <a href="lintas.html">Lintas</a>
+      <a href="login.html">Masuk</a>
+    </nav>
+    <span id="auth-slot"></span>
+  </header>
+  <main>
+    <h1 class="page-title">Lomba</h1>
+    <div id="cfg-banner" class="phase-banner" hidden>
+      Supabase belum dikonfigurasi. Isi <code>docs/js/config.js</code>.
+    </div>
+    <div id="flash" class="flash" hidden></div>
+    <div id="err" class="err" hidden></div>
+    <div id="login-cta" class="phase-banner" hidden></div>
+    <div id="engine-status" class="phase-banner" hidden></div>
+
+    <div class="card">
+      <h2>Daftar lomba</h2>
+      <div id="lomba-list" class="empty">Memuat…</div>
+    </div>
+
+    <div class="card" id="buat-card" hidden>
+      <h2>Buat lomba baru</h2>
+      <p class="hint">
+        Engine dijalankan di browser via Pyodide (Python asli) — generate bracket,
+        jadwal, dan fairness disimpan ke Supabase.
+      </p>
+      <form id="form-buat" autocomplete="off">
+        <div class="form-grid">
+          <label class="full">Nama lomba
+            <input id="fld-nama" required value="Lomba 1">
+          </label>
+          <label>Format
+            <select id="fld-format">
+              <option value="knockout">knockout</option>
+              <option value="preliminary_knockout">preliminary_knockout</option>
+              <option value="round_robin">round_robin</option>
+              <option value="group">group</option>
+              <option value="group_knockout">group_knockout</option>
+            </select>
+          </label>
+          <label>Team size <input id="fld-team" type="number" value="4" min="1"></label>
+          <label>Jumlah juara <input id="fld-winners" type="number" value="1" min="1"></label>
+          <label>Lolos/grup <input id="fld-qualify" type="number" value="1" min="1"></label>
+          <label>Jumlah grup <input id="fld-groups" type="number" min="0" placeholder="0=auto"></label>
+          <label>Durasi (mnt) <input id="fld-dur" type="number" value="30" min="1"></label>
+          <label>Rest min <input id="fld-rest" type="number" value="10" min="0"></label>
+          <label>Arena <input id="fld-arena" type="number" value="2" min="1"></label>
+          <label>Mulai <input id="fld-start" value="08:00"></label>
+          <label>Selesai <input id="fld-end" value="17:00"></label>
+          <label>Tanggal <input id="fld-date" type="date"></label>
+        </div>
+        <h3>Peserta</h3>
+        <p class="hint">Centang kelas yang ikut (dari Master Kelas).</p>
+        <div class="checks" id="peserta-box"><span class="empty">Memuat kelas…</span></div>
+        <div class="actions">
+          <button type="submit" id="btn-buat">Buat lomba + generate skema</button>
+        </div>
+      </form>
+    </div>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/pyengine.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/lomba.js"></script>
+</body>
+</html>

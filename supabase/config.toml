@@ -1,0 +1,34 @@
+# Supabase CLI config — Tahap 1 (schema + RLS).
+# Project ID diisi setelah: supabase link --project-ref <ref>
+# atau salin dari Dashboard -> Project Settings -> API.
+project_id = "tournament-simulator"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
+# Tahap 2: login email+password wajib (RLS authenticated).
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+# false = langsung bisa login tanpa klik link email (demo/dev).
+# Produksi sekolah: true + SMTP sendiri.
+enable_confirmations = false
+
+# JANGAN pernah menaruh service_role key di frontend / repo publik.
+# Ambil anon key: Dashboard -> Settings -> API -> anon public.
