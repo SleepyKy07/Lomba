@@ -1,5 +1,5 @@
 /** Detail lomba: ringkasan / hasil / manual+WO / what-if / probabilitas. */
-(function () {
+(function (global) {
   "use strict";
 
   var TABS = ["ringkasan", "hasil", "manual", "whatif", "prob"];
@@ -841,4 +841,4 @@
   }
 
   document.addEventListener("DOMContentLoaded", load);
-})();
+})(window);

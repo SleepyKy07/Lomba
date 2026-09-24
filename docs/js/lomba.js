@@ -1,5 +1,5 @@
 /** Tahap 3: daftar + buat lomba (generate via Pyodide, simpan ke Supabase). */
-(function () {
+(function (global) {
   "use strict";
 
   var pesertaLoaded = false;
@@ -219,4 +219,4 @@
       );
     }
   });
-})();
+})(window);

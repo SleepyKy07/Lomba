@@ -202,6 +202,26 @@ def check_js_syntax() -> None:
             ok(f"node --check {js.name}")
 
 
+def check_global_iife() -> None:
+    """File yang memakai global.* harus IIFE dengan param (global) + })(window).
+
+    Regresi: login.js dulu (function(){ tanpa param) -> 'global is not defined'
+    di runtime (lolos node --check karena ReferenceError hanya saat eksekusi).
+    """
+    import re
+
+    for js in sorted((DOCS / "js").glob("*.js")):
+        text = js.read_text(encoding="utf-8", errors="replace")
+        if "global." not in text:
+            continue
+        if not re.search(r"\(function\s*\(\s*global\s*\)", text):
+            fail(f"{js.name} pakai global.* tapi IIFE tanpa param (global)")
+        elif not re.search(r"\}\)\(\s*window\s*\);", text):
+            fail(f"{js.name} IIFE param global tapi penutup bukan }})(window)")
+        else:
+            ok(f"{js.name} IIFE global OK")
+
+
 def check_bridge_exports() -> None:
     """BRIDGE di pyengine.js harus import nama yang ada di package tournament."""
     js = (DOCS / "js" / "pyengine.js").read_text(encoding="utf-8", errors="replace")
@@ -272,6 +292,7 @@ def main() -> int:
     scan_secrets()
     check_no_python_dep_in_docs()
     check_js_syntax()
+    check_global_iife()
     check_bridge_exports()
     serve_and_get()
     print()

@@ -1,5 +1,5 @@
 /** Halaman login / daftar — Supabase Auth email+password. */
-(function () {
+(function (global) {
   "use strict";
 
   function nextTarget() {
@@ -83,4 +83,4 @@
     var form = document.getElementById("form-login");
     if (form) form.addEventListener("submit", onSubmit);
   });
-})();
+})(window);

@@ -1,5 +1,5 @@
 /** Fitur Master Kelas — wajib login (Tahap 2 RLS). */
-(function () {
+(function (global) {
   "use strict";
 
   var tbody;
@@ -146,4 +146,4 @@
     }
     refresh();
   });
-})();
+})(window);
