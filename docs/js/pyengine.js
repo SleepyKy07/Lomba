@@ -179,6 +179,13 @@
     "        'score_count': len(results),",
     "    }, ensure_ascii=False)",
     "",
+    "def advance_json(row, scheme_d, results_list):",
+    "    t = _tournament_from_row(row)",
+    "    scheme = _scheme_from_dict(scheme_d, t)",
+    "    results = _results_from_list(results_list)",
+    "    shown = advance_scheme(scheme, results) if results else scheme",
+    "    return json.dumps(shown.to_dict(), ensure_ascii=False)",
+    "",
     "def record_score_json(row, scheme_d, results_list, match_id, sa, sb):",
     "    t = _tournament_from_row(row)",
     "    scheme = _scheme_from_dict(scheme_d, t)",
@@ -604,6 +611,9 @@
     },
     standings: function (row, scheme, results) {
       return callJson("standings_json", [row, scheme, results || []]);
+    },
+    advance: function (row, scheme, results) {
+      return callJson("advance_json", [row, scheme, results || []]);
     },
     recordScore: callRecordScore,
     clearScore: callClearScore,

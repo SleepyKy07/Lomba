@@ -66,3 +66,28 @@ code{background:#e2e8f0;border-radius:4px;padding:.05rem .35rem;font-size:.9em}
 .meta{display:flex;flex-wrap:wrap;gap:.4rem;margin:.35rem 0 .75rem}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
 select{border:1px solid #cbd5e1;border-radius:8px;padding:.4rem .55rem;font:inherit;background:#fff}
+/* Bagan bracket horizontal (dua sisi + tengah) */
+#bracket-tree details{margin-top:.75rem}
+#bracket-tree summary{cursor:pointer}
+.brk-wrap{overflow-x:auto;padding:.25rem 0 .5rem}
+.brk-title{text-align:center;font-weight:800;letter-spacing:.05em;font-size:.95rem;
+  color:#0f172a;margin:.35rem 0 .6rem;white-space:nowrap}
+.brk{position:relative;margin:0 auto}
+.brk .bm{position:absolute;width:150px;background:#fff;border:1.5px solid #64748b;
+  border-radius:6px;font-size:.78rem;box-shadow:0 1px 2px rgba(15,23,42,.12);z-index:2}
+.brk .bm-h{display:flex;justify-content:space-between;gap:.3rem;background:#f1f5f9;
+  border-bottom:1px solid #cbd5e1;padding:.12rem .4rem;font-size:.66rem;color:#475569;
+  border-radius:5px 5px 0 0;font-weight:600}
+.brk .bm-p{padding:.2rem .45rem;border-top:1px solid #e2e8f0;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.brk .bm-p:first-of-type{border-top:none}
+.brk .bm-p.win{background:#dcfce7;color:#14532d;font-weight:700}
+.brk .bm-p.lose{color:#94a3b8}
+.brk .bm-p .grp{color:#64748b;font-weight:600;font-size:.92em}
+.brk .ln{position:absolute;background:#64748b;z-index:1}
+.brk .ln.v{width:2px}
+.brk .ln.h{height:2px}
+.brk .awards{position:absolute;text-align:center}
+.brk .awards .lbl{font-weight:800;font-size:.72rem;letter-spacing:.04em;color:#0f172a;
+  margin-top:.45rem}
+.brk .awards .val{font-size:.85rem;font-weight:600;color:#1d4ed8;min-height:1.1em}

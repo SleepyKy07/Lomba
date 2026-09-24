@@ -241,6 +241,20 @@ def main() -> int:
     assert any(m["id"] == mid for m in st["matches"])
     print("OK standings_json")
 
+    r2 = r1[1].id
+    res2 = json.loads(
+        g["record_score_json"](row, scheme_d, results, r2, 1, 2)
+    )["results"]
+    adv = json.loads(g["advance_json"](row, scheme_d, res2))
+    f_ms = [m for m in adv["matches"] if m["round"] == "F"]
+    assert f_ms, "final tidak ada"
+    fslots = (f_ms[0]["participant_a"], f_ms[0]["participant_b"])
+    # M01: 3-1 -> XII-01 (a) ; M02: 1-2 -> XII-04 (b) ; urutan queue a lalu b
+    assert "XII-01" in fslots and "XII-04" in fslots, (
+        "pemenang tidak mengalir ke final: %r" % (fslots,)
+    )
+    print("OK advance_json")
+
     cl = json.loads(g["clear_score_json"](row, scheme_d, results, mid))
     assert cl["ok"] and cl["score_count"] == 0
     print("OK clear_score_json")
@@ -378,6 +392,7 @@ def main() -> int:
     for name in (
         "create_report_json",
         "standings_json",
+        "advance_json",
         "whatif_json",
         "probability_json",
         "banding_json",

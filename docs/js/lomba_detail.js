@@ -23,6 +23,34 @@
     cta.innerHTML = "";
   }
 
+  async function renderBracketTree(report, row) {
+    var host = document.getElementById("bracket-tree");
+    if (!host || !global.TBracket) return;
+    var scheme = (report && report.scheme) || currentScheme;
+    if (!scheme) return;
+    try {
+      if (currentResults && currentResults.length) {
+        scheme = await TEngine.advance(
+          currentRow || row,
+          scheme,
+          currentResults
+        );
+      }
+    } catch (e) {
+      /* advance gagal -> pakai skema mentah */
+    }
+    var ok = TBracket.render(
+      host,
+      schemeMatches(scheme),
+      currentResults,
+      (row && row.name) || (currentRow && currentRow.name) || ""
+    );
+    if (!ok) {
+      host.innerHTML =
+        '<div class="empty">Tidak ada bagan knockout (format round-robin).</div>';
+    }
+  }
+
   function parseTab() {
     var t = TUI.qs("tab") || "ringkasan";
     if (TABS.indexOf(t) < 0) t = "ringkasan";
@@ -103,6 +131,7 @@
     document.getElementById("card-fairness").hidden = false;
     document.getElementById("card-notes").hidden = false;
     document.getElementById("out-bracket").textContent = report.bracket || "";
+    renderBracketTree(report, row);
     document.getElementById("out-schedule").textContent = report.schedule || "";
     document.getElementById("out-fairness").textContent = report.fairness || "";
     document.getElementById("out-notes").innerHTML = (report.notes || [])
@@ -383,6 +412,7 @@
         currentResults
       );
       renderStandingsView(data);
+      if (currentReport) renderBracketTree(currentReport, currentRow);
       showEngine("");
     } catch (e) {
       showEngine("Gagal klasemen: " + (e.message || e), true);
@@ -818,6 +848,11 @@
       currentScheduled = report.scheduled || currentScheduled;
       currentReport = report;
       showEngine("");
+      try {
+        currentResults = (await TApi.listResults(currentId)) || [];
+      } catch (eRes) {
+        currentResults = [];
+      }
       renderSummary(report, currentRow);
       showOnly(tab);
       bindEvents();

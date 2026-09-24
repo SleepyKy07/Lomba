@@ -42,11 +42,15 @@
 
     <!-- RINGKASAN -->
     <div id="pane-ringkasan" hidden>
-      <div class="grid2">
-        <div class="card" id="card-bracket" hidden>
-          <h2>BRACKET</h2>
+      <div class="card" id="card-bracket" hidden>
+        <h2>BRACKET</h2>
+        <div id="bracket-tree"></div>
+        <details>
+          <summary class="hint">Teks bracket (transparan, PRD §13)</summary>
           <pre id="out-bracket"></pre>
-        </div>
+        </details>
+      </div>
+      <div class="grid2">
         <div class="card" id="card-schedule" hidden>
           <h2>SCHEDULE</h2>
           <pre id="out-schedule"></pre>
@@ -250,6 +254,7 @@
   <script src="js/pyengine.js"></script>
   <script src="js/main.js"></script>
   <script src="js/page.js"></script>
+  <script src="js/bracket_view.js"></script>
   <script src="js/lomba_detail.js"></script>
 </body>
 </html>

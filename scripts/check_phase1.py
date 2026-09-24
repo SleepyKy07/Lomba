@@ -153,6 +153,8 @@ def serve_and_get() -> None:
                 "pane-whatif",
                 "pane-prob",
                 "js/page.js",
+                "js/bracket_view.js",
+                'id="bracket-tree"',
                 'id="skor-table"',
             ):
                 if marker not in detail_html:
