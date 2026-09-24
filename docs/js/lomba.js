@@ -6,13 +6,9 @@
 
   function showLoginCta(msg) {
     var cta = document.getElementById("login-cta");
-    var card = document.getElementById("buat-card");
-    if (card) card.hidden = true;
     if (!cta) return;
-    cta.hidden = false;
-    cta.innerHTML =
-      TUI.esc(msg) +
-      ' <a class="btn" href="login.html?next=lomba.html">Masuk</a>';
+    cta.hidden = true;
+    cta.innerHTML = "";
   }
 
   function setEngineStatus(msg, isErr) {
@@ -57,7 +53,7 @@
         .join("");
       pesertaLoaded = true;
     } catch (e) {
-      box.innerHTML = '<span class="empty">Gagal memuat kelas (login / RLS).</span>';
+      box.innerHTML = '<span class="empty">Gagal memuat kelas. Cek RLS / 0003_public_demo.sql.</span>';
       if (!TUI.onAuthError(e)) TUI.showError(e, "Peserta");
     }
   }
@@ -96,8 +92,8 @@
         "</table>";
     } catch (e) {
       if (e && (e.status === 401 || e.status === 403)) {
-        el.innerHTML = '<div class="empty">Butuh login untuk melihat lomba.</div>';
-        showLoginCta("RLS menolak akses anon.");
+        el.innerHTML =
+          '<div class="empty">Server menolak akses. Jalankan 0003_public_demo.sql (mode publik).</div>';
         return;
       }
       el.innerHTML = '<div class="empty">Gagal memuat lomba.</div>';
@@ -194,18 +190,14 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    if (TAuth.isLoggedIn()) {
-      var card = document.getElementById("buat-card");
-      if (card) card.hidden = false;
-    } else {
-      showLoginCta("Login diperlukan untuk melihat & membuat lomba.");
-    }
+    var card = document.getElementById("buat-card");
+    if (card) card.hidden = false;
     var form = document.getElementById("form-buat");
     if (form) form.addEventListener("submit", onCreate);
     loadPeserta();
     loadList();
     // hangatkan engine di latar (opsional, non-blocking)
-    if (TAuth.isLoggedIn() && TEngine.ensureReady) {
+    if (TEngine.ensureReady) {
       TEngine.ensureReady().then(
         function () {
           setEngineStatus("Engine Python siap.");

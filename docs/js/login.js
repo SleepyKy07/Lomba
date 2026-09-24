@@ -75,12 +75,6 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    if (TAuth.isLoggedIn() && TUI.qs("mode") !== "daftar") {
-      global.location.href = nextTarget();
-      return;
-    }
-    bindMode();
-    var form = document.getElementById("form-login");
-    if (form) form.addEventListener("submit", onSubmit);
+    global.location.replace("index.html");
   });
 })(window);

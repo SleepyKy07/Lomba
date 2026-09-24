@@ -1,4 +1,4 @@
-/** Beranda: stats + indikator login. */
+/** Beranda: stats publik (tanpa login). */
 (function () {
   "use strict";
 
@@ -9,17 +9,11 @@
 
   async function loadStats() {
     try {
-      var u = TAuth.isLoggedIn() ? TAuth.getUser() : null;
-      setStat("stat-user", u && u.email ? u.email : "belum masuk");
+      setStat("stat-user", "publik");
 
       if (!TApi.isConfigured()) {
         setStat("stat-kelas", "-");
         setStat("stat-lomba", "-");
-        return;
-      }
-      if (!TAuth.isLoggedIn()) {
-        setStat("stat-kelas", "login?");
-        setStat("stat-lomba", "login?");
         return;
       }
 
@@ -37,7 +31,7 @@
       setStat("stat-kelas", "-");
       if (e && (e.status === 401 || e.status === 403)) {
         TUI.showError(
-          new Error("Belum login / RLS menolak. Buka Masuk."),
+          new Error("Server menolak akses. Jalankan 0003_public_demo.sql (mode publik)."),
           "Beranda"
         );
       } else {

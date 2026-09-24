@@ -46,18 +46,12 @@
   function showLoginCta(msg, next) {
     var cta = document.getElementById("login-cta");
     if (!cta) return;
-    cta.hidden = false;
-    cta.innerHTML =
-      TUI.esc(msg) +
-      ' <a class="btn" href="login.html?next=' +
-      encodeURIComponent(next || global.location.pathname.split("/").pop()) +
-      '">Masuk</a>';
+    cta.hidden = true;
+    cta.innerHTML = "";
   }
 
   function guardOrCta(msg) {
-    if (TAuth.isLoggedIn()) return true;
-    showLoginCta(msg, global.location.href);
-    return false;
+    return true;
   }
 
   global.TPage = {

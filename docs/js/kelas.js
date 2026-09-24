@@ -1,4 +1,4 @@
-/** Fitur Master Kelas — wajib login (Tahap 2 RLS). */
+/** Fitur Master Kelas — mode publik (0003 RLS dimatikan). */
 (function (global) {
   "use strict";
 
@@ -23,13 +23,10 @@
   }
 
   function showLoginCta(msg) {
-    setMutateEnabled(false);
     var cta = document.getElementById("login-cta");
     if (!cta) return;
-    cta.hidden = false;
-    cta.innerHTML =
-      TUI.esc(msg || "Login diperlukan untuk tambah/hapus kelas.") +
-      ' <a class="btn" href="login.html?next=kelas.html">Masuk</a>';
+    cta.hidden = true;
+    cta.innerHTML = "";
   }
 
   function renderRows(rows) {
@@ -39,7 +36,7 @@
         '<tr><td colspan="4" class="empty">Belum ada kelas.</td></tr>';
       return;
     }
-    var canMutate = TAuth.isLoggedIn();
+    var canMutate = true;
     var html = rows
       .map(function (c) {
         var del = canMutate
@@ -76,9 +73,8 @@
     } catch (e) {
       if (e && (e.status === 401 || e.status === 403)) {
         tbody.innerHTML =
-          '<tr><td colspan="4" class="empty">Butuh login untuk melihat kelas.</td></tr>';
+          '<tr><td colspan="4" class="empty">Server menolak akses. Jalankan 0003_public_demo.sql (mode publik).</td></tr>';
         setCount(0);
-        showLoginCta("RLS menolak akses anon. Masuk dulu.");
         return;
       }
       TUI.showError(e, "Muat kelas");
@@ -107,14 +103,10 @@
       await refresh();
     } catch (e) {
       if (!TUI.onAuthError(e)) TUI.showError(e, "Tambah kelas");
-      if (e && (e.status === 401 || e.status === 403)) {
-        showLoginCta("Sesi tidak valid. Masuk ulang.");
-      }
     }
   }
 
   async function onDelete(id) {
-    if (!TUI.guardAuth("kelas.html")) return;
     if (!global.confirm("Hapus kelas " + id + "?")) return;
     TUI.clearMessages();
     try {
@@ -123,9 +115,6 @@
       await refresh();
     } catch (e) {
       if (!TUI.onAuthError(e)) TUI.showError(e, "Hapus kelas");
-      if (e && (e.status === 401 || e.status === 403)) {
-        showLoginCta("Sesi tidak valid. Masuk ulang.");
-      }
     }
   }
 
@@ -139,11 +128,7 @@
         if (btn) onDelete(btn.getAttribute("data-del"));
       });
     }
-    if (TAuth.isLoggedIn()) {
-      setMutateEnabled(true);
-    } else {
-      showLoginCta("Tambah/hapus kelas setelah login.");
-    }
+    setMutateEnabled(true);
     refresh();
   });
 })(window);

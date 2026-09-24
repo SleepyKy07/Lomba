@@ -74,45 +74,19 @@
 
   function renderAuthSlot() {
     var slot = document.getElementById("auth-slot");
-    if (!slot || !global.TAuth) return;
-    if (TAuth.isLoggedIn()) {
-      var u = TAuth.getUser() || {};
-      var email = u.email || "masuk";
-      slot.innerHTML =
-        '<span class="badge ok" title="' +
-        esc(email) +
-        '">' +
-        esc(email) +
-        "</span> " +
-        '<button type="button" class="ghost" id="btn-logout">Keluar</button>';
-      var btn = document.getElementById("btn-logout");
-      if (btn) {
-        btn.addEventListener("click", async function () {
-          await TAuth.signOut();
-          global.location.href = "index.html?msg=" +
-            encodeURIComponent("Anda keluar.");
-        });
-      }
-    } else {
-      slot.innerHTML =
-        '<a class="btn" href="login.html">Masuk</a>';
-    }
+    if (!slot) return;
+    slot.hidden = true;
+    slot.innerHTML = "";
   }
 
   function guardAuth(redirectNext) {
-    if (!global.TAuth) return false;
-    if (TAuth.isLoggedIn()) return true;
-    var next =
-      redirectNext ||
-      (global.location.pathname.split("/").pop() || "index.html");
-    global.location.href = "login.html?next=" + encodeURIComponent(next);
-    return false;
+    return true;
   }
 
   function onAuthError(err) {
-    if (err && err.needAuth) {
+    if (err && (err.status === 401 || err.status === 403)) {
       showError(
-        new Error("Sesi habis atau belum login. Silakan masuk lagi."),
+        new Error("Server menolak akses. Cek RLS / jalankan 0003_public_demo.sql."),
         "Auth"
       );
       return true;

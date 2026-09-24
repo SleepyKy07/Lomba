@@ -17,7 +17,10 @@
   }
 
   function showLoginCta(msg) {
-    TPage.showLoginCta(msg, "lomba_detail.html?id=" + (currentId || ""));
+    var cta = document.getElementById("login-cta");
+    if (!cta) return;
+    cta.hidden = true;
+    cta.innerHTML = "";
   }
 
   function parseTab() {
@@ -793,10 +796,6 @@
       return;
     }
     var tab = parseTab();
-    if (!TAuth.isLoggedIn()) {
-      showLoginCta("Login diperlukan untuk membuka lomba.");
-      return;
-    }
     try {
       var rows = await TApi.getTournament(currentId);
       if (!rows || !rows.length) {
@@ -833,7 +832,7 @@
     } catch (e) {
       showEngine("Gagal: " + (e.message || e), true);
       if (e && (e.status === 401 || e.status === 403)) {
-        showLoginCta("RLS menolak akses.");
+        showEngine("Server menolak akses. Jalankan 0003_public_demo.sql (mode publik).", true);
         return;
       }
       if (!TUI.onAuthError(e)) TUI.showError(e, "Detail lomba");

@@ -20,13 +20,13 @@ Tanpa dependensi: **stdlib only** (http.server, sqlite3, unittest). Python ≥3.
 
 ## Migrasi Tahap 1–4 — Frontend static + Supabase (GitHub Pages)
 
-Fitur di `docs/`: **Master Kelas**, **auth**, **Buat/Detail Lomba** (Pyodide), **hasil/klasemen**, **what-if**, **probabilitas**, **banding**, **lintas & optimasi multi-lomba**. Tanpa `web.py` / SQLite / `STORE` untuk hosting.
+Fitur di `docs/`: **Master Kelas**, **Buat/Detail Lomba** (Pyodide), **hasil/klasemen**, **what-if**, **probabilitas**, **banding**, **lintas & optimasi multi-lomba**. Tanpa `web.py` / SQLite / `STORE` untuk hosting. **Mode publik: tanpa login** (RLS dimatikan via `0003`).
 
 ### Setup (sekali)
 
 1. SQL Editor → `supabase/migrations/0001_init.sql` (tabel + seed).
-2. SQL Editor → `supabase/migrations/0002_auth_rls.sql` (**hapus policy anon**, RLS `authenticated` + `owner_id`).
-3. Auth → Providers → Email: **Confirm email = OFF** (demo) / ON + SMTP (produksi).
+2. SQL Editor → `supabase/migrations/0002_auth_rls.sql` (opsional, mode login).
+3. SQL Editor → `supabase/migrations/0003_public_demo.sql` (**mode publik** — RLS off, tanpa login).
 4. Settings → API → **Project URL** + **anon public** → isi `docs/js/config.js`.  
    **Jangan** taruh `service_role` / `sb_secret_*` di frontend.
 5. Sinkron engine ke frontend (wajib sebelum serve/deploy):  
@@ -40,12 +40,11 @@ python scripts/sync_engine_to_docs.py
 python -m http.server 8080 --directory docs
 ```
 
-1. `login.html?mode=daftar` → daftar / masuk.
-2. `kelas.html` → kelola master kelas.
-3. `lomba.html` → buat lomba (Pyodide generate ~detik; load pertama bisa lama).
-4. `lomba_detail.html?id=L1` → BRACKET / SCHEDULE / FAIRNESS.
-5. Tab detail: `&tab=hasil` skor + klasemen · `&tab=manual` walkover/swap/pindah/ganti · `&tab=whatif` · `&tab=prob`.
-6. `banding.html` banding beberapa lomba · `lintas.html` bentrok antar-lomba + optimasi time-shift.
+1. `kelas.html` → kelola master kelas (langsung, tanpa login).
+2. `lomba.html` → buat lomba (Pyodide generate ~detik; load pertama bisa lama).
+3. `lomba_detail.html?id=L1` → BRACKET / SCHEDULE / FAIRNESS.
+4. Tab detail: `&tab=hasil` skor + klasemen · `&tab=manual` walkover/swap/pindah/ganti · `&tab=whatif` · `&tab=prob`.
+5. `banding.html` banding beberapa lomba · `lintas.html` bentrok antar-lomba + optimasi time-shift.
 
 ### Cek cepat
 
@@ -67,7 +66,7 @@ Belum di frontend (opsional lanjutan): simpan hasil optimasi ke `manual_schedule
 ```
 docs/                        # FRONTEND static GitHub Pages (Tahap 1–4) — tanpa Python server
   index.html, kelas.html     # beranda + Master Kelas
-  login.html                 # auth: daftar/masuk (Supabase Auth)
+  login.html                 # redirect ke index (mode publik; auth code disimpan)
   lomba.html, lomba_detail.html # buat + detail (ringkasan/hasil/whatif/prob)
   banding.html, lintas.html  # Tahap 4: banding skema · lintas + optimasi multi
   css/styles.css
